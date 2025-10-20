@@ -10,3 +10,7 @@ build
 Commands.txt
 
 *.so
+
+__pyache__
+
+*.pyc
