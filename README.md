@@ -19,5 +19,3 @@ This project is a simple yet efficient differential equation solver designed to 
 - Potential **finite element method (FEM)** extensions for PDEs
 
 ---
-
-This project is ideal for learning about numerical ODE integration and experimenting with different Runge–Kutta methods in a flexible C++/Python hybrid environment.
