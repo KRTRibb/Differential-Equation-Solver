@@ -45,6 +45,8 @@ pybind11_add_module(diffeqpy
     src/Steppers/euler_stepper.cpp
     src/Steppers/midpoint_stepper.cpp
     src/Steppers/rk3_stepper.cpp
+    src/Steppers/rk4_stepper.cpp
+    src/Steppers/rk5_stepper.cpp
 )
 
 target_include_directories(diffeqpy PRIVATE

@@ -9,6 +9,8 @@
 #include "Steppers/euler_stepper.hpp"
 #include "Steppers/midpoint_stepper.hpp"
 #include "Steppers/rk3_stepper.hpp"
+#include "Steppers/rk4_stepper.hpp"
+#include "Steppers/rk5_stepper.hpp"
 #include "errorfunc/metric.hpp"
 #include "errorfunc/funcs.hpp"
 
@@ -142,8 +144,18 @@ PYBIND11_MODULE(diffeqpy, m) {
 
     py::class_<RK3Stepper, Stepper>(m, "RK3Stepper")
         .def(py::init<>())
-        .def("GetOrder", & RK3Stepper::GetOrder)
+        .def("GetOrder", &RK3Stepper::GetOrder)
         .def("GetName", &RK3Stepper::GetName);
+
+    py::class_<RK4Stepper, Stepper>(m, "RK4Stepper")
+        .def(py::init<>())
+        .def("GetOrder", &RK4Stepper::GetOrder)
+        .def("GetName", &RK4Stepper::GetName);
+
+    py::class_<RK5Stepper, Stepper>(m, "RK5Stepper")
+        .def(py::init<>())
+        .def("GetOrder", &RK5Stepper::GetOrder)
+        .def("GetName", &RK5Stepper::GetName);
 
     // ---- Solver ----
     py::class_<Solver>(m, "Solver")

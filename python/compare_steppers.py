@@ -33,7 +33,7 @@ def plot_comparison(results, exact_funcs):
         # Error plot
         ax = axes[1, i]
         ax.plot(t, err)
-        ax.set_title(f"{stepper.GetName()} Error ({result.error_func_name})")
+        ax.set_title(f"{stepper.GetName()}\nError ({result.error_func_name})")
         ax.set_xlabel("Time")
         ax.set_ylabel("Error")
         ax.grid(True)

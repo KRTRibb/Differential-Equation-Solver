@@ -1,6 +1,5 @@
 #include "Steppers/rk3_stepper.hpp"
 
-
 using namespace diffeq;
 
 void RK3Stepper::step(const RHS& f, double& t, Vec& y, double h) {
