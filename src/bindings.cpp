@@ -12,7 +12,6 @@
 #include "Steppers/rk4_stepper.hpp"
 #include "Steppers/rk5_stepper.hpp"
 #include "errorfunc/metric.hpp"
-#include "errorfunc/funcs.hpp"
 
 namespace py = pybind11;
 using namespace diffeq;
@@ -36,7 +35,7 @@ class PyStepper : public Stepper {
 PYBIND11_MODULE(diffeqpy, m) {
     m.doc() = "Python bindings for diffeq solver library";
 
-    // ---- Vec bindings ----
+    // Vec bindings
     py::bind_vector<std::vector<double>>(m, "Vec")
         .def("__getitem__", [](const Vec &v, size_t i) { return v[i]; })
         .def("__setitem__", [](Vec &v, size_t i, double val) { v[i] = val; })
@@ -51,7 +50,7 @@ PYBIND11_MODULE(diffeqpy, m) {
 
     py::implicitly_convertible<py::list, std::vector<double>>();
 
-    // ---- IVPProblem ----
+    // IVPProblem
     // Now f is expected to return a Vec
     py::class_<IVPProblem>(m, "IVPProblem")
         .def(py::init<const std::function<Vec(double, const Vec&)>&, const Vec&, double>(),
@@ -75,7 +74,7 @@ PYBIND11_MODULE(diffeqpy, m) {
         .def_readwrite("y0", &IVPProblem::y0)
         .def_readwrite("t0", &IVPProblem::t0);
 
-    // ---- ErrorMetric ----
+    // ErrorMetric
     py::class_<errorfunc::ErrorMetric>(m, "ErrorMetric")
         .def(py::init<std::string, std::function<double(const Vec&, const Vec&)>>())
         .def_readwrite("name", &errorfunc::ErrorMetric::name)
@@ -88,7 +87,7 @@ PYBIND11_MODULE(diffeqpy, m) {
     m.attr("rel_L2") = errorfunc::REL_L2;
 
 
-    // ---- IntegrationResult ----
+    // IntegrationResult
     py::class_<IntegrationResult>(m, "IntegrationResult")
         .def_readonly("T", &IntegrationResult::T)
         .def_readonly("Y", &IntegrationResult::Y)
@@ -125,7 +124,7 @@ PYBIND11_MODULE(diffeqpy, m) {
         .def_readonly("min_pow", &ConvergenceTestResult::min_pow)
         .def_readonly("max_pow", &ConvergenceTestResult::max_pow);
 
-    // ---- Stepper ----
+    // Stepper
     py::class_<Stepper, PyStepper>(m, "Stepper")
         .def(py::init<>())
         .def("step", &Stepper::step)
@@ -157,7 +156,7 @@ PYBIND11_MODULE(diffeqpy, m) {
         .def("GetOrder", &RK5Stepper::GetOrder)
         .def("GetName", &RK5Stepper::GetName);
 
-    // ---- Solver ----
+    // Solver
     py::class_<Solver>(m, "Solver")
         .def(py::init<Stepper&>(), py::keep_alive<1, 2>())
         .def("integrateFixedSteps",

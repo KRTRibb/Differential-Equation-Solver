@@ -22,24 +22,24 @@ from compare_steppers import StepperComparison
 # y0 = np.array([1.0, 2.0])
 
 "Third test for polynomial type equation"
-# def f(t, y):
-#     dydt = [0, 0]
-#     dydt[0] = -1.0 * y[0] + t         # dy1/dt = -y1 + t
-#     dydt[1] = -2.0 * y[1] + t**2     # dy2/dt = -2*y2 + t^2
-#     return dydt
+def f(t, y):
+    dydt = [0, 0]
+    dydt[0] = -1.0 * y[0] + t         # dy1/dt = -y1 + t
+    dydt[1] = -2.0 * y[1] + t**2     # dy2/dt = -2*y2 + t^2
+    return dydt
 
-# def exact(t):
-#     y = [0, 0]
-#     y[0] = t - 1.0 + 2.0 * np.exp(-t)            # y1(t)
-#     y[1] = 0.5*t**2 - 0.5*t + 0.25 - 0.25*np.exp(-2.0*t)  # y2(t)
-#     return y
+def exact(t):
+    y = [0, 0]
+    y[0] = t - 1.0 + 2.0 * np.exp(-t)            # y1(t)
+    y[1] = 0.5*t**2 - 0.5*t + 0.25 - 0.25*np.exp(-2.0*t)  # y2(t)
+    return y
 
 y0 = np.array([1.0, 0.0])
 
 t0 = 0.0
-t_end = 200
+t_end = 20
 h = 0.01
-error_metric = diffeqpy.L2
+error_metric = diffeqpy.rms
 
 comp = StepperComparison(f, exact, y0, t0, t_end, h, error_metric)
 

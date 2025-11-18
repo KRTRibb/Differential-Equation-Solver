@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import diffeqpy
+import matplotlib.pyplot as plt
 
 # Predator-prey system (no exact solution)
 def f(t, y):
