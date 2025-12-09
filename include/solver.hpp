@@ -9,7 +9,7 @@ namespace diffeq {
 
 struct IntegrationResult {
     std::vector<double> T;              // Time points
-    std::vector<Vec> Y;                 // Numerical solutions
+    std::vector<Vec> Y;                 // Numerical solutions for all T
     std::vector<Vec> exactY;            // Exact solutions (if provided)
     std::vector<double> errors;         // Error values per step
     std::string error_func_name;        // Name of error metric

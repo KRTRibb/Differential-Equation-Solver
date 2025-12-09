@@ -23,7 +23,7 @@ IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_e
     result.exactY.push_back(exactSolution(t));
     result.errors.push_back(metric.func(y, result.exactY.back()));
 
-    const double epsilon = std::numeric_limits<double>::epsilon() * std::max(1.0, std::abs(t_end));
+    const double epsilon = std::numeric_limits<double>::epsilon() * std::max<double>(1.0, std::abs(t_end));
 
     while (t < t_end - epsilon) {
         double hstep = std::min(h, t_end - t);
@@ -60,7 +60,7 @@ IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_e
     result.T.push_back(t);
     result.Y.push_back(y);
 
-    const double epsilon = std::numeric_limits<double>::epsilon() * std::max(1.0, std::abs(t_end));
+    const double epsilon = std::numeric_limits<double>::epsilon() * std::max<double>(1.0, std::abs(t_end));
 
     while (t < t_end - epsilon) {
         double hstep = std::min(h, t_end - t);

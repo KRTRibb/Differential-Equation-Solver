@@ -13,7 +13,7 @@ class RK4Stepper : public Stepper {
 
     private:
         const char* name = "Runge-Kutta 4";
-        const int order = 3;
+        const int order = 4;
 };
 
 }

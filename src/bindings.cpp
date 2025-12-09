@@ -12,6 +12,7 @@
 #include "Steppers/rk4_stepper.hpp"
 #include "Steppers/rk5_stepper.hpp"
 #include "errorfunc/metric.hpp"
+#include "pde.hpp"
 
 namespace py = pybind11;
 using namespace diffeq;
@@ -114,7 +115,7 @@ PYBIND11_MODULE(diffeqpy, m) {
         .def_readonly("final_error", &IntegrationResult::final_error);
 
 
-    py::class_<ConvergenceTestResult>(m, "ConvergeceTestResult")
+    py::class_<ConvergenceTestResult>(m, "ConvergenceTestResult")
         .def_readonly("t_end", &ConvergenceTestResult::t_end)
         .def_readonly("h_vals", &ConvergenceTestResult::h_vals)
         .def_readonly("final_error", &ConvergenceTestResult::final_error)
@@ -171,4 +172,33 @@ PYBIND11_MODULE(diffeqpy, m) {
         .def("GetErrors", &Solver::GetErrors)
         .def("convergenceTest", &Solver::convergenceTest)
         .def("printConvergenceTest", &Solver::printConvergenceTest);
+
+    // PDE helpers
+    py::enum_<pde::BCType>(m, "BCType")
+        .value("Dirichlet", pde::BCType::Dirichlet)
+        .value("Neumann", pde::BCType::Neumann);
+
+    m.def("make_heat_rhs", &pde::make_heat_rhs,
+          py::arg("alpha"),
+          py::arg("n_interior"),
+          py::arg("dx"),
+          py::arg("left_bc") = pde::BCType::Dirichlet,
+          py::arg("right_bc") = pde::BCType::Dirichlet,
+          py::arg("left_val") = pde::BCFunc(),
+          py::arg("right_val") = pde::BCFunc(),
+          R"pbdoc(
+            Create the RHS for the 1D heat equation using the method of lines.
+
+            Parameters:
+                alpha: Thermal diffusivity.
+                n_interior: Number of interior grid points.
+                dx: Grid spacing.
+                left_bc: Boundary condition type for the left boundary (Dirichlet or Neumann).
+                right_bc: Boundary condition type for the right boundary (Dirichlet or Neumann).
+                left_val: Function for the left boundary value (Dirichlet) or flux (Neumann).
+                right_val: Function for the right boundary value (Dirichlet) or flux (Neumann).
+
+            Returns:
+                A callable RHS function for the heat equation.
+          )pbdoc");
 }

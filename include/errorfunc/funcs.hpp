@@ -49,7 +49,7 @@ inline double l2norm(const Vec& y_true, const Vec& y_approx) {
 inline double maxnorm(const Vec& y_true, const Vec& y_approx) {
     double maxerr = 0.0;
     for (size_t i = 0; i < y_true.size(); ++i)
-        maxerr = std::max(maxerr, std::abs(y_true[i] - y_approx[i]));
+        maxerr = std::max(maxerr, (double)std::abs(y_true[i] - y_approx[i]));
     return maxerr;
 }
 
