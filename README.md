@@ -197,7 +197,6 @@ python3 python/plot_animate.py
 │   ├── predator_prey.py
 │   ├── plot_animate.py
 │   ├── compare_steppers.py
-│   └── ThermalLab/             # Jupyter notebook examples
 └── build/                      # Build output (created by CMake)
 ```
 
