@@ -13,7 +13,7 @@ int main() {
     EulerStepper euler;
     Solver solver(euler);
 
-    // ---- TEST 1 ----
+    // TEST 1
     // dy/dt = -y, y(0) = 1 -> exact: y(t) = exp(-t)
     IVPProblem prob1;
     prob1.f = [](double t, const Vec& y) {
@@ -31,7 +31,7 @@ int main() {
     solver.demoRun(prob1, 1.0, 0.1, exact1, RMS);
     solver.convergenceTestDemoRun(prob1, 1.0, exact1, 1, 10, RMS);
 
-    // ---- TEST 2 ----
+    // TEST 2
     // dy/dt = cos(t), y(0) = 0 -> exact: y(t) = sin(t)
     IVPProblem prob2;
     prob2.f = [](double t, const Vec& y) {
@@ -49,7 +49,7 @@ int main() {
     solver.demoRun(prob2, M_PI, 0.1, exact2, RMS);
     solver.convergenceTestDemoRun(prob2, M_PI, exact2, 1, 10, RMS);
 
-    // ---- TEST 3 ----
+    // TEST 3
     // System dy/dt = A*y where A = [[0,1],[-1,0]] (circular motion)
     // Exact solution: y1 = cos(t), y2 = -sin(t)
     IVPProblem prob3;
