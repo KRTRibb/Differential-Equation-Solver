@@ -33,6 +33,15 @@ add_executable(diffeq_demo
     src/Steppers/euler_stepper.cpp
 )
 
+add_executable(1d_heat_example
+    examples/heat_1d.cpp
+    src/solver.cpp
+    src/pde/heat_equation.cpp
+    src/Steppers/rk4_stepper.cpp
+)
+
+target_include_directories(1d_heat_example PRIVATE include)
+
 target_include_directories(diffeq_demo PRIVATE include)
 
 pybind11_add_module(diffeqpy
@@ -43,7 +52,7 @@ pybind11_add_module(diffeqpy
     src/Steppers/rk3_stepper.cpp
     src/Steppers/rk4_stepper.cpp
     src/Steppers/rk5_stepper.cpp
-    src/pde.cpp
+    src/pde/heat_equation.cpp
 )
 
 target_include_directories(diffeqpy PRIVATE

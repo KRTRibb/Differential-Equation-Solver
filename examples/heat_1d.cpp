@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include "pde.hpp"
+#include "pde/heat_equation.hpp"
 #include "solver.hpp"
 #include "Steppers/rk4_stepper.hpp"
 #include "errorfunc/metric.hpp"
@@ -26,7 +26,7 @@ int main() {
     const double dt = 0.25 * dx * dx / alpha;
 
     // Build RHS using Dirichlet zero BCs on both ends
-    auto rhs = make_heat_rhs(alpha, n_interior, dx, BCType::Dirichlet, BCType::Dirichlet);
+    auto rhs = make_heat_rhs_1d(alpha, n_interior, dx, BCType::Dirichlet, BCType::Dirichlet);
 
     IVPProblem prob;
     prob.f = rhs;

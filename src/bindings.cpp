@@ -12,7 +12,7 @@
 #include "Steppers/rk4_stepper.hpp"
 #include "Steppers/rk5_stepper.hpp"
 #include "errorfunc/metric.hpp"
-#include "pde.hpp"
+#include "pde/heat_equation.hpp"
 
 namespace py = pybind11;
 using namespace diffeq;
@@ -178,7 +178,7 @@ PYBIND11_MODULE(diffeqpy, m) {
         .value("Dirichlet", pde::BCType::Dirichlet)
         .value("Neumann", pde::BCType::Neumann);
 
-    m.def("make_heat_rhs", &pde::make_heat_rhs,
+    m.def("make_heat_rhs_1d", &pde::make_heat_rhs_1d,
           py::arg("alpha"),
           py::arg("n_interior"),
           py::arg("dx"),
