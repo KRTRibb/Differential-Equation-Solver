@@ -1,0 +1,80 @@
+import diffeqpy as deq
+import numpy as np
+import matplotlib.pyplot as plt
+
+"""
+Code for plotting temperature diffusion 
+on a 2D rectangular plate over time.
+Boundary conditions : No heat flow at the edges
+Initial Profile : Gaussian Initial Profile
+"""
+
+alpha = 1
+
+# Define the rectangle grid
+N = 40
+dx, dy = 1 / N, 1 / N
+x = np.linspace(-1/2, 1/2, N)
+y = np.linspace(-1/2, 1/2, N)
+
+X, Y = np.meshgrid(x, y)
+
+# Gaussian Initial Profile 
+sigma = 0.1
+u0_full = np.exp(-(X**2 + Y**2) / sigma**2)
+
+print("Initial Mean (full grid) =", np.mean(u0_full))
+
+# Extract interior only
+u0_int = u0_full[1:-1, 1:-1]
+
+# Flatten for solver
+y0 = u0_int.flatten()
+
+bc_type = deq.BCType.Neumann
+
+dt = 0.00002603082
+
+def bc(x):
+    return 0
+
+t0 = 0
+
+rhs = deq.make_heat_rhs_2d(alpha, N, N, dx, dy, bc_type, bc_type, bc_type, bc_type, bc, bc, bc, bc)
+
+prob = deq.IVPProblem(rhs, y0, 0)
+
+rk4_stepper = deq.RK4Stepper()
+solver = deq.Solver(rk4_stepper)
+
+# Stability limit is given y dt <= dx^2/(4 * alpha), this is under the limit
+dt = 1.5e-5
+
+t_end = 0.5
+dt = 1.5e-5
+nsteps = int(t_end / dt)
+
+result = solver.integrateFixedSteps(prob, t_end, dt)
+
+# Extract final state
+u_final = np.array(result.Y)[-1]
+u_final = u_final.reshape((N-2, N-2))
+print(f"Final mean = {np.mean(u_final)}")
+
+# Reconstruct full grid (with Neumann BC)
+u_plot = np.zeros((N, N))
+u_plot[1:-1, 1:-1] = u_final
+
+# Neumann: copy boundary from nearest interior
+u_plot[0, :] = u_plot[1, :]
+u_plot[-1, :] = u_plot[-2, :]
+u_plot[:, 0] = u_plot[:, 1]
+u_plot[:, -1] = u_plot[:, -2]
+
+plt.figure(figsize=(6,5))
+plt.imshow(u_plot, extent=[-0.5,0.5,-0.5,0.5], origin='lower')
+plt.colorbar(label="Temperature")
+plt.title(f"Heat Diffusion at t = {t_end}")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.show()

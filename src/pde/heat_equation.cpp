@@ -86,9 +86,9 @@ RHS pde::make_heat_rhs_2d(double alpha,
         const double dy2 = dy * dy;
 
         // Evaluate BC values/fluxes once per RHS call
-        const double bc_left = left_val ? left_val(t)   : 0.0;
-        const double bc_right = right_val ? right_val(t)  : 0.0;
-        const double bc_top = top_val ? top_val(t)    : 0.0;
+        const double bc_left = left_val ? left_val(t) : 0.0;
+        const double bc_right = right_val ? right_val(t) : 0.0;
+        const double bc_top = top_val ? top_val(t): 0.0;
         const double bc_bottom = bottom_val ? bottom_val(t) : 0.0;
 
         // Helper: get interior value by interior indices (i, j) in [0, nx_int) x [0, ny_int)

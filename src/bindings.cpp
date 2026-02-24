@@ -201,4 +201,56 @@ PYBIND11_MODULE(diffeqpy, m) {
             Returns:
                 A callable RHS function for the heat equation.
           )pbdoc");
+
+    m.def("make_heat_rhs_2d", &pde::make_heat_rhs_2d,
+            py::arg("alpha"),
+            py::arg("nx"), py::arg("ny"),
+            py::arg("dx"), py::arg("dy"),
+            py::arg("left_bc") = pde::BCType::Dirichlet,
+            py::arg("right_bc") = pde::BCType::Dirichlet,
+            py::arg("top_bc") = pde::BCType::Dirichlet,
+            py::arg("bottom_bc") = pde::BCType::Dirichlet,
+            py::arg("left_val") = pde::BCFunc(),
+            py::arg("right_val") = pde::BCFunc(),
+            py::arg("top_val") = pde::BCFunc(),
+            py::arg("bottom_val") = pde::BCFunc(),
+            R"pbdoc(
+                Create the RHS for the 2D heat equation using the method of lines.
+    
+                Parameters:
+                    alpha: Thermal diffusivity.
+                    nx, ny: Number of grid points in the x and y directions (including boundaries).
+                    dx, dy: Grid spacing in the x and y directions.
+                    left_bc, right_bc, top_bc, bottom_bc: Boundary condition types for each boundary (Dirichlet or Neumann).
+                    left_val, right_val, top_val, bottom_val: Functions for boundary values (Dirichlet) or fluxes (Neumann).
+    
+                Returns:
+                    A callable RHS function for the 2D heat equation.
+            )pbdoc"
+    );
+
+    m.def("make_heat_rhs_3d", &pde::make_heat_rhs_3d,
+            py::arg("alpha"),
+            py::arg("nx"), py::arg("ny"), py::arg("nz"),
+            py::arg("dx"), py::arg("dy"), py::arg("dz"),
+            py::arg("left_bc"), py::arg("right_bc"),
+            py::arg("top_bc"), py::arg("bottom_bc"),
+            py::arg("front_bc"), py::arg("back_bc"),
+            py::arg("left_val"), py::arg("right_val"),
+            py::arg("top_val"), py::arg("bottom_val"),
+            py::arg("front_val"), py::arg("back_val"),
+            R"pbdoc(
+                Create the RHS for the 3D heat equation using the method of lines.
+    
+                Parameters:
+                    alpha: Thermal diffusivity.
+                    nx, ny, nz: Number of grid points in the x, y, and z directions (including boundaries).
+                    dx, dy, dz: Grid spacing in the x, y and z directions.
+                    left_bc, right_bc, top_bc, bottom_bc, front_bc, back_bc: Boundary condition types for each boundary (Dirichlet or Neumann).
+                    left_val, right_val, top_val, bottom_val, front_val, back_val: Functions for boundary values (Dirichlet) or fluxes (Neumann).
+    
+                Returns:
+                    A callable RHS function for the 3D heat equation.
+            )pbdoc"
+        );
 }

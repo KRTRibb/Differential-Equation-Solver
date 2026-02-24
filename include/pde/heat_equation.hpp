@@ -6,12 +6,6 @@
 namespace diffeq {
 namespace pde {
 
-// Simple boundary condition types used by the helpers
-enum class BCType { Dirichlet, Neumann };
-
-// Boundary value / flux signature: value at a boundary as a function of time
-using BCFunc = std::function<double(double)>;
-
 // Build an RHS for the 1D heat equation using the method of lines.
 // The returned RHS expects a state vector `y` containing the values at
 // the `n_interior` grid points (interior points only; boundary values
