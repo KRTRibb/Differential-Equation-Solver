@@ -7,6 +7,11 @@
 
 namespace diffeq {
 
+enum class HistoryLevel {
+    FINAL_ONLY, 
+    FULL // Every Step
+};
+
 struct IntegrationResult {
     std::vector<double> T;              // Time points
     std::vector<Vec> Y;                 // Numerical solutions for all T
@@ -16,7 +21,8 @@ struct IntegrationResult {
     int n_steps = 0;                    // Number of steps
     double h_used = 0.0;                // Step size used
     double total_time = 0.0;            // Execution time (seconds)
-    double final_error = 0.0;           // Error at final time
+    double final_error = 0.0;            // Error at final time
+    HistoryLevel history_level;         // How much of the history was stores
 };
 
 struct ConvergenceTestResult {
@@ -35,10 +41,10 @@ public:
     explicit Solver(Stepper& stepper_) : stepper(stepper_) {}
 
     // Integrate with exact solution (collects errors)
-    IntegrationResult integrateFixedSteps(const IVPProblem& prob, double t_end, double h, const std::function<Vec(double)>& exactSolution, const errorfunc::ErrorMetric& metric = errorfunc::L2) const;
+    IntegrationResult integrateFixedSteps(const IVPProblem& prob, double t_end, double h, const std::function<Vec(double)>& exactSolution, const errorfunc::ErrorMetric& metric = errorfunc::L2, HistoryLevel history = HistoryLevel::FULL) const;
 
     // Integrate without exact solution (no errors)
-    IntegrationResult integrateFixedSteps(const IVPProblem& prob, double t_end, double h) const;
+    IntegrationResult integrateFixedSteps(const IVPProblem& prob, double t_end, double h, HistoryLevel history = HistoryLevel::FULL) const;
 
     // Print results (with or without exact solution)
     void printResults(const IntegrationResult& result) const;

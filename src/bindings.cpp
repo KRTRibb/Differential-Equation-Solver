@@ -87,6 +87,10 @@ PYBIND11_MODULE(diffeqpy, m) {
     m.attr("max_norm") = errorfunc::MAX;
     m.attr("rel_L2") = errorfunc::REL_L2;
 
+    // History Level Enum
+    py::enum_<HistoryLevel>(m, "history_level")
+        .value("final_only", HistoryLevel::FINAL_ONLY)
+        .value("full", HistoryLevel::FULL);
 
     // IntegrationResult
     py::class_<IntegrationResult>(m, "IntegrationResult")
@@ -112,9 +116,10 @@ PYBIND11_MODULE(diffeqpy, m) {
         .def_readonly("n_steps", &IntegrationResult::n_steps)
         .def_readonly("h_used", &IntegrationResult::h_used)
         .def_readonly("total_time", &IntegrationResult::total_time)
-        .def_readonly("final_error", &IntegrationResult::final_error);
+        .def_readonly("final_error", &IntegrationResult::final_error)
+        .def_readonly("history_level", &IntegrationResult::history_level);
 
-
+    // Convergance Test Result
     py::class_<ConvergenceTestResult>(m, "ConvergenceTestResult")
         .def_readonly("t_end", &ConvergenceTestResult::t_end)
         .def_readonly("h_vals", &ConvergenceTestResult::h_vals)
@@ -161,11 +166,11 @@ PYBIND11_MODULE(diffeqpy, m) {
     py::class_<Solver>(m, "Solver")
         .def(py::init<Stepper&>(), py::keep_alive<1, 2>())
         .def("integrateFixedSteps",
-             py::overload_cast<const IVPProblem&, double, double>(&Solver::integrateFixedSteps, py::const_),
-             py::arg("prob"), py::arg("t_end"), py::arg("h"))
+             py::overload_cast<const IVPProblem&, double, double, HistoryLevel>(&Solver::integrateFixedSteps, py::const_),
+             py::arg("prob"), py::arg("t_end"), py::arg("h"), py::arg("history") = HistoryLevel::FULL)
         .def("integrateFixedSteps",
-             py::overload_cast<const IVPProblem&, double, double, const std::function<Vec(double)>&, const errorfunc::ErrorMetric&>(&Solver::integrateFixedSteps, py::const_),
-             py::arg("prob"), py::arg("t_end"), py::arg("h"), py::arg("exactSolution"), py::arg("metric") = errorfunc::L2)
+             py::overload_cast<const IVPProblem&, double, double, const std::function<Vec(double)>&, const errorfunc::ErrorMetric&, HistoryLevel>(&Solver::integrateFixedSteps, py::const_),
+             py::arg("prob"), py::arg("t_end"), py::arg("h"), py::arg("exactSolution"), py::arg("metric") = errorfunc::L2, py::arg("history") = HistoryLevel::FULL)
         .def("printResults", &Solver::printResults)
         .def("GetApproximations", &Solver::GetApproximations)
         .def("GetExactVals", &Solver::GetExactVals)

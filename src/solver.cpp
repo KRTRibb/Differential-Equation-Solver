@@ -9,7 +9,7 @@
 using namespace diffeq;
 
 // Integrate with exact solution
-IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_end, double h, const std::function<Vec(double)>& exactSolution, const errorfunc::ErrorMetric& metric) const {
+IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_end, double h, const std::function<Vec(double)>& exactSolution, const errorfunc::ErrorMetric& metric, HistoryLevel history) const {
     auto startTime = std::chrono::steady_clock::now();
     IntegrationResult result;
     result.h_used = h;
@@ -28,9 +28,18 @@ IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_e
     while (t < t_end - epsilon) {
         double hstep = std::min(h, t_end - t);
         stepper.step(prob.f, t, y, hstep);
+        
+        if (history == HistoryLevel::FULL) { // Store every step in Y
+            result.T.push_back(t);
+            result.Y.push_back(y);
+        } else { // For HistoryLevel::FINAL_ONLY
+            // Only store final step
+            if (t >= t_end - epsilon) {
+                result.T.push_back(t);
+                result.Y.push_back(y);
+            }
+        }
 
-        result.T.push_back(t);
-        result.Y.push_back(y);
 
         Vec exact = exactSolution(t);
         result.exactY.push_back(exact);
@@ -48,7 +57,7 @@ IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_e
 }
 
 // Integrate without exact solution
-IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_end, double h) const {
+IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_end, double h, HistoryLevel history) const {
     auto startTime = std::chrono::steady_clock::now();
     IntegrationResult result;
     result.h_used = h;
@@ -65,8 +74,17 @@ IntegrationResult Solver::integrateFixedSteps(const IVPProblem& prob, double t_e
     while (t < t_end - epsilon) {
         double hstep = std::min(h, t_end - t);
         stepper.step(prob.f, t, y, hstep);
-        result.T.push_back(t);
-        result.Y.push_back(y);
+
+        if (history == HistoryLevel::FULL) { // Store every step in Y
+            result.T.push_back(t);
+            result.Y.push_back(y);
+        } else { // For HistoryLevel::FINAL_ONLY
+            // Only store final step
+            if (t >= t_end - epsilon) {
+                result.T.push_back(t);
+                result.Y.push_back(y);
+            }
+        }
         result.n_steps++;
     }
 
